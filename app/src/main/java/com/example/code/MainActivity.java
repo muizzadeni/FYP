@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
 // classes needed to initialize map
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -47,6 +48,8 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener, PermissionsListener {
+    // for firebase
+    private FirebaseAnalytics mFirebaseAnalytics;
     // variables for adding location layer
     private MapView mapView;
     private MapboxMap mapboxMap;
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, getString(R.string.access_token));
         setContentView(R.layout.activity_main);
@@ -116,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
 
-        Point destinationPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
+        Point destinationPoint = Point.fromLngLat(-0.417745,51.507644); // other way round when entering from google
         Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
                 locationComponent.getLastKnownLocation().getLatitude());
 
