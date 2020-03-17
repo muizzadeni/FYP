@@ -1,13 +1,22 @@
 package com.example.code;
+
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
 import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.Toast;
 
 // classes needed to initialize map
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -26,6 +35,7 @@ import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
@@ -36,14 +46,17 @@ import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import android.util.Log;
 
 // classes needed to launch navigation UI
 import android.view.View;
 import android.widget.Button;
+
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 
 
@@ -62,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private NavigationMapRoute navigationMapRoute;
     // variables needed to initialize navigation
     private Button button;
+    // firebase
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        //firebase
+        // mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -117,22 +134,71 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         loadedMapStyle.addLayer(destinationSymbolLayer);
     }
 
-    @SuppressWarnings( {"MissingPermission"})
+
+    @SuppressWarnings({"MissingPermission"})
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
 
-        Point destinationPoint = Point.fromLngLat(-0.417745,51.507644); // other way round when entering from google
-        Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
-                locationComponent.getLastKnownLocation().getLatitude());
+        // adding to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("Hayes");
 
-        GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
-        if (source != null) {
-            source.setGeoJson(Feature.fromGeometry(destinationPoint));
-        }
 
-        getRoute(originPoint, destinationPoint);
-        button.setEnabled(true);
-        button.setBackgroundResource(R.color.mapboxBlue);
+        myRef.child("longitude").setValue(-0.41774);
+        myRef.child("latitude").setValue(51.50764);
+        // adding to the database -- end
+
+        //retrieving from database
+
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Double longitude = dataSnapshot.child("longitude").getValue(Double.class); //double was String
+                Double latitude = dataSnapshot.child("latitude").getValue(Double.class);
+               Log.d(TAG, "Value is: " + longitude + latitude);
+
+               // maps part
+                Point destinationPoint = Point.fromLngLat(longitude, latitude); // other way round when entering from google
+                Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
+                        locationComponent.getLastKnownLocation().getLatitude());
+
+                GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
+                if (source != null) {
+                    source.setGeoJson(Feature.fromGeometry(destinationPoint));
+                }
+
+                getRoute(originPoint, destinationPoint);
+                button.setEnabled(true);
+                button.setBackgroundResource(R.color.mapboxBlue);
+                // maps part end
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                //Log.w(TAG, "Failed to read value.", error.toException());
+
+            }
+        });
+
+        //retrieving from database -- end
+
+//        Point destinationPoint = Point.fromLngLat(-0.41774, 51.50764); // other way round when entering from google
+//        Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
+//                locationComponent.getLastKnownLocation().getLatitude());
+//
+//        GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
+//        if (source != null) {
+//            source.setGeoJson(Feature.fromGeometry(destinationPoint));
+//        }
+//
+//        getRoute(originPoint, destinationPoint);
+//        button.setEnabled(true);
+//        button.setBackgroundResource(R.color.mapboxBlue);
+
         return true;
     }
 
@@ -173,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 });
     }
 
-    @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings({"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
         // Check if permissions are enabled and if not request
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
