@@ -17,7 +17,9 @@ public class AddSpots extends AppCompatActivity {
      EditText EditLongitude;
      EditText EditLatitude;
      EditText EditTown;
+     Button button;
      DatabaseReference reff;
+     Spots spots;
 
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -26,22 +28,24 @@ public class AddSpots extends AppCompatActivity {
         EditTown = findViewById(R.id.enter_town);
         EditLongitude = findViewById(R.id.enter_longitude);
         EditLatitude = findViewById(R.id.enter_latitude);
-       // reff= FirebaseDatabase.getInstance().getReference().child(String.valueOf(EditTown)); // EditTown is town name
+        button = (Button)findViewById(R.id.add_location);
+        spots = new Spots();
+        reff= FirebaseDatabase.getInstance().getReference().child("Spots");
 
-        Button button = findViewById(R.id.add_location);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 double Longitude = Double.parseDouble(EditLongitude.getText().toString().trim()); //might need to change this as double is being insterted
                 double Latitude = Double.parseDouble(EditLatitude.getText().toString().trim()); //might need to change this as double is being insterted
-                String Town = EditTown.getText().toString().trim(); //this was done differently in video
-/*
-                reff.push().setValue(Town);
-                reff.push().setValue(Longitude);
-                reff.push().setValue(Latitude);
-                Toast.makeText(AddSpots.this,"data insterted successfully", Toast.LENGTH_LONG).show(); //done till here
-*/
+
+                spots.setTown(EditTown.getText().toString().trim());
+                spots.setLatitude(Latitude);
+                spots.setLongitude(Longitude);
+
+                reff.push().setValue(spots);
+                Toast.makeText(AddSpots.this, "data insterted successfully",Toast.LENGTH_LONG).show();
+
             }
         });
 
