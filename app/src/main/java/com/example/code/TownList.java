@@ -52,6 +52,80 @@ public class TownList extends AppCompatActivity {
         myListView = (ListView) findViewById(R.id.list); //List is id given in xml file
         myListView.setAdapter(myArrayAdapter);
 
+        myListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if (position == 0){
+                    Intent myIntent = new Intent(view.getContext(),MainActivity.class);
+                    startActivityForResult(myIntent, 0);
+                }
+
+                if (position == 1) {
+
+                    Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+
+                    startActivityForResult(myIntent, 0);
+
+                }
+
+
+                if (position == 2) {
+
+                    Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+
+                    startActivityForResult(myIntent, 0);
+
+                }
+
+
+                if (position == 3) {
+
+                    Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+
+                    startActivityForResult(myIntent, 0);
+
+                }
+
+
+                if (position == 4) {
+
+                    Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+
+                    startActivityForResult(myIntent, 0);
+
+                }
+
+
+                if (position == 5) {
+
+                    Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+
+                    startActivityForResult(myIntent, 0);
+
+                }
+
+
+                if (position == 6) {
+
+                    Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+
+                    startActivityForResult(myIntent, 0);
+
+                }
+
+
+                if (position == 7) {
+
+                    Intent myIntent = new Intent(view.getContext(), MainActivity.class);
+
+                    startActivityForResult(myIntent, 0);
+
+                }
+
+            }
+        });
+
         mRef = FirebaseDatabase.getInstance().getReference("Spots");
 
         mRef.addChildEventListener(new ChildEventListener() {
@@ -83,9 +157,14 @@ public class TownList extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
+
+
+
         });
 
     }
+
+
 }
 
 // --------------------=========================================================================================

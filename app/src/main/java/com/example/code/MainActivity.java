@@ -141,11 +141,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // adding to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Hayes");
+        DatabaseReference myRef = database.getReference("Hayes"); //currently only using hayes spot, change to use depending on ehats selected
 
 
-        myRef.child("longitude").setValue(-0.41774);
-        myRef.child("latitude").setValue(51.50764);
+        /*myRef.child("longitude").setValue(-0.41774);
+        myRef.child("latitude").setValue(51.50764);*/
+
         // adding to the database -- end
 
         //retrieving from database
