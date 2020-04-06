@@ -43,7 +43,9 @@ public class AddSpots extends AppCompatActivity {
                 spots.setLatitude(Latitude);
                 spots.setLongitude(Longitude);
 
-                reff.push().setValue(spots);
+
+
+                reff.child(String.valueOf(EditTown.getText())).setValue(spots); // to name the child to the town name
                 Toast.makeText(AddSpots.this, "data insterted successfully",Toast.LENGTH_LONG).show();
 
             }
