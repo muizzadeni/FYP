@@ -141,11 +141,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // adding to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Hayes"); //currently only using hayes spot, change to use depending on ehats selected
+        DatabaseReference myRef = database.getReference("Karachi"); //currently only using hayes spot, change to use depending on ehats selected, this is used to shift the focus to this child
+
+        //Log.d(TAG, "Value is: " + ); // figure out what to do to see of its using correct child
+/*
+        myRef.child("latitude").setValue(24.763723);
+        myRef.child("longitude").setValue(67.066899);*/
 
 
-        /*myRef.child("longitude").setValue(-0.41774);
-        myRef.child("latitude").setValue(51.50764);*/
 
         // adding to the database -- end
 
@@ -157,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Double longitude = dataSnapshot.child("longitude").getValue(Double.class); //double was String
-                Double latitude = dataSnapshot.child("latitude").getValue(Double.class);
-               Log.d(TAG, "Value is: " + longitude + latitude);
+                Double latitude = dataSnapshot.child("latitude").getValue(Double.class).doubleValue();
+                Double longitude = dataSnapshot.child("longitude").getValue(Double.class).doubleValue(); //double was String
+               Log.d(TAG, "Value is: " + latitude + longitude);
 
                // maps part
                 Point destinationPoint = Point.fromLngLat(longitude, latitude); // other way round when entering from google

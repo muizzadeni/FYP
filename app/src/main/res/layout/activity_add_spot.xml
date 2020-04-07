@@ -30,24 +30,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Longitude:"
+        android:text="Latitude:"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
+
     <EditText
-        android:id="@+id/enter_longitude"
+        android:id="@+id/enter_latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:digits="0123456789-."/>
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Latitude:"
+        android:text="Longitude:"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <EditText
-        android:id="@+id/enter_latitude"
+        android:id="@+id/enter_longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"

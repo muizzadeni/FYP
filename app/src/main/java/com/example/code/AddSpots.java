@@ -26,8 +26,8 @@ public class AddSpots extends AppCompatActivity {
         setContentView(R.layout.activity_add_spot);
 
         EditTown = findViewById(R.id.enter_town);
-        EditLongitude = findViewById(R.id.enter_longitude);
         EditLatitude = findViewById(R.id.enter_latitude);
+        EditLongitude = findViewById(R.id.enter_longitude);
         button = (Button)findViewById(R.id.add_location);
         spots = new Spots();
         reff= FirebaseDatabase.getInstance().getReference().child("Spots");
